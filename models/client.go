@@ -3,14 +3,11 @@ package models
 import "time"
 
 type Client struct {
-	ID             uint           `gorm:"primaryKey"`
-	FirstName      string         `gorm:"not null"`
-	SecondName     string         `gorm:"default:null"`
-	LastName       string         `gorm:"not null"`
-	SecondLastName string         `gorm:"default:null"`
-	PhoneNumber    string         `gorm:"not null"`
-	Metadata       map[string]any `gorm:"type:jsonb"`
-	ServiceOrders  []ServiceOrder `gorm:"foreignKey:ClientID"`
-	CreatedAt      *time.Time
-	UpdatedAt      *time.Time
+	ID            uint           `json:"id" gorm:"primaryKey"`
+	Name          string         `json:"name" gorm:"not null"`
+	PhoneNumber   string         `json:"phone_number" gorm:"not null"`
+	Metadata      JSONB          `json:"metadata" gorm:"type:jsonb"`
+	ServiceOrders []ServiceOrder `json:"service_orders" gorm:"foreignKey:ClientID"`
+	CreatedAt     *time.Time     `json:"-"`
+	UpdatedAt     *time.Time     `json:"-"`
 }

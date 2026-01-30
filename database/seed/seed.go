@@ -16,7 +16,7 @@ func ResetDatabase() {
 		&models.Tool{},
 	)
 
-	fmt.Println("✅ Tables dropped successfully!")
+	fmt.Println("Tables dropped successfully!")
 }
 
 func SeedDatabase() {
@@ -30,7 +30,7 @@ func SeedDatabase() {
 	database.DB.Create(&models.User{Name: "Admin", Email: "admin@example.com"})
 
 	// Insert a new Client
-	client := &models.Client{FirstName: "Mh", LastName: "Client", PhoneNumber: "1234567890", Metadata: map[string]any{"whatsapp": true, "test": "test"}}
+	client := &models.Client{Name: "Mh Client", PhoneNumber: "1234567890", Metadata: map[string]any{"whatsapp": true, "test": "test"}}
 	database.DB.Create(client)
 
 	// Insert a new Service Order
@@ -38,7 +38,7 @@ func SeedDatabase() {
 	database.DB.Create(service_order)
 
 	// Insert a new Tool
-	tool := &models.Tool{Model: "Model 1", Brand: "Brand 1", Location: "Location 1", ServiceOrderID: service_order.ID}
+	tool := &models.Tool{Model: "HP1350", ToolType: "Taladro", Brand: "Makita", Location: "Location 1", ServiceOrderID: service_order.ID}
 	database.DB.Create(tool)
 
 	fmt.Println("Database connected & migrated!")

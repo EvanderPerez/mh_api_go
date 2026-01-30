@@ -20,3 +20,15 @@ func GetClients(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, clients)
 }
+
+func GetClientNames(c *gin.Context) {
+	var clients []models.Client
+
+	result := database.DB.Select("id", "first_name", "second_name", "last_name", "second_last_name").Find(&clients)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, clients)
+}

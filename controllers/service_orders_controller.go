@@ -14,11 +14,14 @@ func GetServiceOrders(c *gin.Context) {
 	var service_orders []models.ServiceOrder
 	clientIDStr := c.Query("client_id")
 
+	context := database.DB
+	context = context.Preload("Client").Preload("Tools")
+
 	var result *gorm.DB
 	if clientIDStr != "" {
-		result = database.DB.Where("clientID = ?", clientIDStr).Find(&service_orders)
+		result = context.Where("client_ID = ?", clientIDStr).Find(&service_orders)
 	} else {
-		result = database.DB.Find(&service_orders)
+		result = context.Find(&service_orders)
 	}
 
 	if result.Error != nil {
@@ -26,4 +29,16 @@ func GetServiceOrders(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, service_orders)
+}
+
+func CreateServiceOrder(c *gin.Context) {
+	var order models.ServiceOrder
+
+	if err := c.ShouldBindJSON(&order); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	database.DB.Create(&order) // Auto-creates Client, ServiceOrder & Tools
+	c.JSON(http.StatusCreated, order)
 }
